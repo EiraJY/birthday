@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>生日惊喜抽奖机</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="stars2"></div>
+  <div class="stars3"></div>
+  <div class="shooting-stars"></div>
+
+  <canvas id="fireworks"></canvas>
+
+  <main class="container">
+    <section id="introScreen" class="screen active">
+      <div class="intro-box glow-panel">
+        <div class="intro-lines" id="introText">
+          <p>欢迎来到你的专属生日抽奖机！</p>
+          <p>今天，你将拥有三次抽奖机会~</p>
+          <p>每个奖池里都藏着我为你准备的心意</p>
+          <p>请开始吧~</p>
+        </div>
+        <div class="music-hint-panel">
+          <button id="musicToggleBtn" class="music-toggle" type="button" aria-pressed="true">
+            <span class="music-toggle-icon">♫</span>
+            <span id="musicToggleText">背景音乐已准备好，若还没响，轻轻点我一下</span>
+          </button>
+        </div>
+        <button id="introBtn" class="main-btn">点击继续</button>
+      </div>
+    </section>
+
+    <section id="wheelScreen" class="screen hidden">
+      <div class="wheel-layout">
+        <div class="wheel-header glow-panel">
+          <p class="wheel-title">旋转的星空转盘</p>
+          <p id="drawCountText">剩余抽奖次数：3</p>
+        </div>
+
+        <div class="wheel-stage">
+          <div id="interactiveSky" class="interactive-sky"></div>
+          <div class="wheel-whispers" aria-hidden="true">
+            <span class="whisper whisper-1">有些光点，会悄悄回应你</span>
+            <span class="whisper whisper-2">最亮的那颗星，也许不止“一点点”</span>
+            <span class="whisper whisper-3">宇宙里藏着一点点偏心</span>
+          </div>
+          <button id="secretStar" class="secret-star" title="神秘星星">✦</button>
+          <div id="rocketTrail" class="rocket-trail hidden">
+            <div class="rocket">🚀</div>
+            <div class="rocket-message">嘿！你发现了一个秘密：其实所有奖品都是我一早为你精心挑选的，<span class="no-break">生日快乐，我的男孩！</span></div>
+          </div>
+
+          <div class="wheel-wrap">
+            <div class="wheel-glow"></div>
+            <div class="wheel-orbit orbit-outer"></div>
+            <div class="wheel-orbit orbit-inner"></div>
+
+            <div id="planetRing" class="planet-ring">
+              <div class="planet-slot slot-0" data-key="gift1" title="惊喜礼物一 · 金星"><div class="planet venus"></div></div>
+              <div class="planet-slot slot-1" data-key="gift2" title="惊喜礼物二 · 水星"><div class="planet mercury"></div></div>
+              <div class="planet-slot slot-2" data-key="game" title="游戏陪玩券 · 木星"><div class="planet jupiter"></div></div>
+              <div class="planet-slot slot-3" data-key="gift4" title="惊喜礼物四 · 火星"><div class="planet mars"></div></div>
+              <div class="planet-slot slot-4" data-key="movie" title="电影券 · 海王星"><div class="planet neptune"></div></div>
+              <div class="planet-slot slot-5" data-key="hidden" title="全心全意券 · 黑洞"><div class="planet blackhole"></div></div>
+              <div class="planet-slot slot-6" data-key="snack" title="零食大礼包券 · 天王星"><div class="planet uranus"></div></div>
+              <div class="planet-slot slot-7 earth-slot" data-key="lucky" title="好运连连 · 地球"><div class="planet earth earth-img"></div></div>
+              <div class="planet-slot slot-8" data-key="gift3" title="惊喜礼物三 · 冥王星"><div class="planet pluto"></div></div>
+            </div>
+
+            <button id="spinBtn" class="pointer-btn" aria-label="抽一次">
+              <span class="pointer-core"></span>
+              <span id="pointerNeedle" class="pointer-needle"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="wheel-actions">
+          <button id="drawBtn" class="main-btn big-btn">抽一次</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="ticketScreen" class="screen hidden">
+      <div class="ticket-fall-wrap">
+        <div id="ticketScene" class="ticket-scene">
+          <div id="ticketCard" class="ticket-card golden-ticket">
+            <span class="ticket-notch left top"></span>
+            <span class="ticket-notch left bottom"></span>
+            <span class="ticket-notch right top"></span>
+            <span class="ticket-notch right bottom"></span>
+
+            <div class="ticket-face ticket-front">
+              <div class="ticket-front-stars"></div>
+              <div class="ticket-front-title">星空惊喜券</div>
+              <div class="ticket-front-subtitle">一份小心意正在掉落中…</div>
+            </div>
+
+            <div class="ticket-face ticket-back">
+              <div class="ticket-left">
+                <div class="ticket-head">专属奖券</div>
+                <h2 id="ticketTitle">惊喜礼物一</h2>
+                <p id="ticketSubtitle" class="ticket-subtitle">幸运掉落中…</p>
+                <p id="ticketWhisper" class="ticket-whisper">所有惊喜都在慢慢奔向你</p>
+              </div>
+              <div class="ticket-right">
+                <img id="ticketImage" src="" alt="奖券图片" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="ticketActions" class="ticket-actions hidden">
+          <button id="downloadTicketBtn" class="download-btn" title="下载保存奖券">
+            <span class="download-icon">⭳</span><span>下载保存奖券</span>
+          </button>
+          <button id="collectBtn" class="main-btn">收下惊喜</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="prizeScreen" class="screen hidden">
+      <div class="prize-panel glow-panel">
+        <h2 class="title">我的奖品</h2>
+        <div id="prizeList" class="prize-list"></div>
+        <p class="prize-summary">恭喜你集齐三次惊喜！请前往你聪明可爱善良漂亮的女朋友处领取奖励~嘻嘻嘻嘻</p>
+        <button id="goCakeBtn" class="main-btn">前往生日蛋糕</button>
+      </div>
+    </section>
+
+    <section id="cakeScreen" class="screen hidden">
+      <div id="cakeStage" class="cake-stage">
+        <div class="cake-title-wrap"><span class="stage-badge">生日蛋糕</span></div>
+        <div class="cake-stage-layout">
+          <div class="girl-wrap image-girl-wrap">
+            <div class="speech-bubble">许个愿吧~</div>
+            <img src="assets/nvhai.png" alt="小女孩" class="girl-image" />
+          </div>
+
+          <div class="cake-wrap">
+            <div class="cake fancy-cake">
+              <div id="candlesWrap" class="number-candles">
+                <div class="number-candle number-two"><i class="flame flame-left"></i><span>2</span></div>
+                <div class="number-candle number-one"><i class="flame flame-right"></i><span>1</span></div>
+              </div>
+              <div class="cake-top"></div>
+              <div class="cake-drips cake-drips-top"></div>
+              <div class="cake-middle"></div>
+              <div class="cake-drips cake-drips-middle"></div>
+              <div class="cake-bottom"></div>
+              <div class="cake-berries berries-top"><span></span><span></span><span></span><span></span></div>
+              <div class="cake-berries berries-bottom"><span></span><span></span><span></span><span></span><span></span></div>
+              <div class="cake-plate"></div>
+            </div>
+            <p class="birthday-text">生日快乐，许个愿吧~</p>
+            <button id="blowBtn" class="main-btn">点灭蜡烛</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="giftStage" class="gift-stage hidden">
+        <div class="cake-title-wrap"><span class="stage-badge">小彩蛋</span></div>
+        <div class="gift-stage-inner">
+          <button id="loveGiftBtn" class="love-giftbox" aria-label="打开礼盒">
+            <span class="gift-lid"></span>
+            <span class="gift-box"></span>
+            <span class="gift-ribbon gift-ribbon-v"></span>
+            <span class="gift-ribbon gift-ribbon-h"></span>
+            <span class="gift-tag">To my love</span>
+          </button>
+
+          <div id="lovePrizeTicket" class="love-prize-ticket hidden golden-ticket final-ticket">
+            <span class="ticket-notch left top"></span>
+            <span class="ticket-notch left bottom"></span>
+            <span class="ticket-notch right top"></span>
+            <span class="ticket-notch right bottom"></span>
+            <div class="final-ticket-inner">
+              <div class="ticket-head">额外大奖</div>
+              <h2>“爱心大餐”兑换券</h2>
+              <p class="final-line">恭喜你获得了一次我亲手做的大餐兑换券！</p>
+              <p class="final-line">有效期：一辈子</p>
+            </div>
+          </div>
+
+          <button id="downloadLoveBtn" class="download-btn hidden" title="下载保存奖券">
+            <span class="download-icon">⭳</span><span>下载保存奖券</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <audio id="openMusic" preload="auto" loop>
+    <source src="assets/open-music.flac" type="audio/flac">
+    <source src="assets/open-music.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="birthdaySong" preload="auto">
+    <source src="assets/birthday-song.mp3" type="audio/mpeg">
+  </audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
